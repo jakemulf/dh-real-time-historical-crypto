@@ -53,11 +53,20 @@ def retrieve_coin_current_price(coin, exchange, currency):
         print(f"Failed to parse data for {coin}-{currency} on {exchange}")
         return None
 
-real_time_data = (time_table("00:01:00")
-            .update([
-                "Price = (double)retrieve_coin_current_price(COIN, EXCHANGE, CURRENCY)",
-                "Coin = COIN",
-                "Exchange = EXCHANGE",
-                "Currency = CURRENCY",
-            ])
-)
+def create_real_time_data_table(time_interval="00:01:00"):
+    """
+    Creates a Deephaven time table that pulls data from cryptowatch on a timed basis
+
+    Parameters:
+        time_interval (str): The interval for the time table
+    Returns:
+        Table: The Deephaven time table that pulls from cryptowatch
+    """
+    return (time_table(time_interval)
+                .update([
+                    "Price = (double)retrieve_coin_current_price(COIN, EXCHANGE, CURRENCY)",
+                    "Coin = COIN",
+                    "Exchange = EXCHANGE",
+                    "Currency = CURRENCY",
+                ])
+    )
